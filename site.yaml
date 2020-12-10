@@ -41,7 +41,7 @@
         port: "{{http_port}}"
         proto: tcp
        
-    - name: Nginx service started
+    - name: Nginx service restarted
       service:
         name: nginx
         state: restarted
