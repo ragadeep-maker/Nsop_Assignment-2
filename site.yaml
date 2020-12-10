@@ -41,15 +41,10 @@
         port: "{{http_port}}"
         proto: tcp
        
-    - name: Restart Nginx
+    - name: Nginx service started
       service:
         name: nginx
         state: restarted
-       
-- hosts: webservers
-  name: gathering facts
-  tasks:
-    - debug: var=ansible_all_ipv4_addresses
            
 - hosts: haproxy
   become: yes
