@@ -1,7 +1,7 @@
 # Nsop_Assignment-2
 Implementation of Webservice using Ansible
 ------------------------------------------
-In this Assignment i had deployed nginx webservers using ansible
-from the controll server bastionET2598 and
-by loadbalancing with haproxy for the webservers.
+In this Assignment i had deployed nginx webservers using ansible.
+Where bastionET2598 acts as a controll server for devA,devB,devC(Webservers),devhaproxy(haproxy) servers and
+haproxy acts as loadbalancer for the webservers.
 
