@@ -1,0 +1,74 @@
+---
+- hosts: webservers
+  remote_user: ubuntu
+  gather_facts: yes
+  become: yes
+  vars:
+    http_port: "80"
+
+  tasks:
+    - name: Update_packages
+      apt:
+        update_cache: yes
+        state: present
+
+    - name: Install nginx,php,php-fpm packages
+      apt:
+        name: ['nginx' , 'php' , 'php-fpm']
+        state: latest
+       
+    - name: Remove apache2 packages
+      apt:
+        name: apache2
+        update_cache: yes
+        state: absent
+        purge: yes
+    
+    - name: Configuration of nginx file
+      template:
+        src: template/nginx.cfg.j2
+        dest: /etc/nginx/sites-available/default
+    
+    - name: Serving Content from index.php to webservers
+      copy:
+        src: index.php
+        dest: /var/www/html/index.php
+   
+   
+    - name: Allow 'Nginx HTTP' on layer 4
+      ufw:
+        rule: allow
+        port: "{{http_port}}"
+        proto: tcp
+       
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
+       
+- hosts: webservers
+  name: gathering facts
+  tasks:
+    - debug: var=ansible_all_ipv4_addresses
+           
+- hosts: haproxy
+  become: yes
+  remote_user: ubuntu
+  gather_facts: yes
+  tasks:
+    - name: installing haproxy
+      apt:
+        name: haproxy
+        update_cache: yes
+        state: latest
+
+    - name: Configuration of haproxy for loadbalancing
+      template:
+        src: template/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+ 
+    - name: haproxy service restart
+      service:
+        name: "haproxy"
+        state: restarted
+
