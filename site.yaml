@@ -44,12 +44,7 @@
     - name: Nginx service restarted
       service:
         name: nginx
-        state: restarted
-        
-- hosts: webservers
-  name: gathering facts
-  tasks:
-    - debug: var=ansible_all_ipv4_addresses        
+        state: restarted      
            
 - hosts: haproxy
   become: yes
